@@ -1,4 +1,5 @@
 #Copyright 2020, Erik Jastad, All rights reserved.
+#This script will joins all objects that have a similar name (Skeleton.001 and Skeleton.002, etc, will join together)
 import bpy
 
 run = True
