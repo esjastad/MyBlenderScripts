@@ -1,3 +1,3 @@
 # MyBlenderScripts  
   
-My collection of blender scripts
+A collection of blender scripts I wrote.
