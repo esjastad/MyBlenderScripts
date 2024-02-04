@@ -2,33 +2,30 @@
 #This script will joins all objects that have a similar name (Skeleton.001 and Skeleton.002, etc, will join together)
 import bpy
 
-run = True
 i = 0
 
-while(run):
-    #Check that index is not beyond array length
-    if (i <= (len(bpy.data.objects) - 1)):
-        #Get the object name
-        temp = bpy.data.objects[i].name.split(".obj")
-        name = temp[0]
-        
-        #Get objects with similar name as object name captured above
-        obs = [o for o in bpy.data.objects if o.name.split(".obj")[0] == name]        
+while(i <= (len(bpy.data.objects) - 1)):
+    temp = bpy.data.objects[i].name.split(".obj")
+    name = temp[0]
 
-        #Setup context, active and selected objects to join
-        ctx = bpy.context.copy()
-        ctx["active_object"] = ctx["object"] = bpy.data.objects[i]
-        ctx["selected_objects"] = ctx["selected_editable_objects"] = obs
+    obs = [o for o in bpy.data.objects if o.name.split(".obj")[0] == name]
 
-        #try to join the objects
-        try:
-            bpy.ops.object.join(ctx)        
-        except:
-            print("Skipping non mesh object")
+    # Set the first object in the list as the active object
+    if obs:
+        bpy.context.view_layer.objects.active = obs[0]
 
-        #Increment to next index            
-        i += 1
-    else:
-        run = False    
+    # Select all objects in the list
+    for obj in obs:
+        obj.select_set(True)
 
-        
+    # Join the selected objects
+    try:
+        bpy.ops.object.join()
+    except:
+        print("Skipping")
+
+    # Update the scene
+    bpy.context.view_layer.update()
+    # Deselect all objects
+    bpy.ops.object.select_all(action='DESELECT')
+    i+=1
